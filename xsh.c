@@ -37,6 +37,14 @@ int main(int argc, char *argv[]){
 			printf("Copyright (C) 2025, John Doe. License BSD 3-clause or later\n\nThis is free software. Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this lists of conditions, and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\n");
 			printf("%s\n", disclaimer);
 			return 0;
+		} else if(strcmp(argv[i], "--help") == 0){
+			printf("%s (%s)\n", version, arch);
+			printf("Usage: xsh [ OPERAND ]\n");
+			printf("Args:\n\n");
+			printf("<no arg>: execute xsh normally\n");
+			printf("--version: print version and license and exit\n");
+			printf("--help: display this help and exit\n");
+			return 0;
 		} else {
 			;
 		}
@@ -108,9 +116,8 @@ int main(int argc, char *argv[]){
         			printf("xsh: %s: command not found\n", args[0]);
     			}
 			} else {
-    			perror("xsh: fork failed");
+    			perror("xsh: unable to execute command");
 			}
-
     	}
     }
 }

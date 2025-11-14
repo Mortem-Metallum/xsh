@@ -86,7 +86,7 @@ int main(int argc, char *argv[]){
 			if(pw){
 				printf("%s\n", pw->pw_name);
 			} else {
-				printf("whoami: who are you?\n");
+				printf("who are you?\n");
 			}
 		} else if(strncmp(cmd, "echo", 4) == 0){
 			char *msg = cmd + 4;

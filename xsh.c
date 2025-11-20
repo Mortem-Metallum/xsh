@@ -28,10 +28,10 @@ void prompt(){
 	uid_t uid = getuid();
 	struct passwd *pw = getpwuid(uid);
 	if(strcmp(pw->pw_name, "root") != 0){
-		printf("%% ");
+		printf("\n%% ");
    		fflush(stdout);
 	} else {
-		printf("# ");
+		printf("\n# ");
    		fflush(stdout);
 	}
 }

@@ -87,6 +87,8 @@ int main(int argc, char *argv[]){
 			printf("exit\n");
         	return 0;
     	} else if(strcmp(cmd, "whoami") == 0){
+			uid_t uid = getuid();
+			struct passwd *pw = getpwuid(uid);
 			if(pw){
 				printf("%s\n", pw->pw_name);
 			} else {

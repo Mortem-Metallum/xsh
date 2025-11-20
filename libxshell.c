@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "xsh.h"
 
+// Information for the prompt (% if a regular user, or # if root)
 void prompt(){
     uid_t uid = getuid();
 	struct passwd *pw = getpwuid(uid);
@@ -15,6 +16,7 @@ void prompt(){
    		fflush(stdout);
 	}
 }
+// When SIGINT occurs (Ctrl+C), just continue executing
 void handle_sigint(int sig){
 	printf("\n");
     prompt();

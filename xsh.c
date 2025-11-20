@@ -58,7 +58,8 @@ int main(int argc, char *argv[]){
 			printf("%s\n", disclaimer);
 			return 0;
 		} else {
-			;
+			printf("-xsh: %s was unexpected at this time.\n", argv[i]);
+			return 1;
 		}
 	i++;
 	}
@@ -117,9 +118,15 @@ int main(int argc, char *argv[]){
 			while(*msg == ' ') msg++;
 			printf("%s\n", msg);
 		} else if(strncmp(cmd, "cd", 2) == 0){
+			uid_t uid = getuid();
+			struct passwd *pw = getpwuid(uid);
 			char *dir = cmd + 2;
 			while(*dir == ' ') dir++;
-			chdir(dir);
+			if(strcmp(dir, "~") == 0 || strcmp(dir, "") == 0){
+				chdir(pw->pw_dir);
+			} else {
+				chdir(dir);
+			}
 		} else {
         	char *args[64];
         	int argc_local = 0;

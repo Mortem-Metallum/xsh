@@ -126,5 +126,8 @@ int main(int argc, char *argv[]){
     			perror("xsh: unable to execute command");
 			}
     	}
+
     }
+	printf("\nexit\n");
+	return 0;
 }

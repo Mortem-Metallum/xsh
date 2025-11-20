@@ -1,2 +1,2 @@
 all:
-  gcc xsh.c -o xsh
+	gcc xsh.c -o xsh

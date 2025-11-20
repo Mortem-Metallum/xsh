@@ -1,1 +1,2 @@
-Its Xsh. Its a UNIX shell, and it doesn't even have a fully working cd yet. There's not much to say about it.
+Its Xsh. Its a UNIX shell. There's not much to say about it.
+You can run commands like echo, cd, clear, whoami, and pwd. It is also able to execute other programs. I have not given it the ability to execute an .xshrc file or even any Xsh script, BUT I will eventually.

@@ -92,9 +92,10 @@ int main(int argc, char *argv[]){
 			char *msg = cmd + 4;
 			while(*msg == ' ') msg++;
 			printf("%s\n", msg);
-		} else if(strcmp(cmd, "cd") == 0){
-			struct passwd *pw = getpwuid(getuid());
-			chdir(pw->pw_dir);
+		} else if(strncmp(cmd, "cd", 2) == 0){
+			char *dir = cmd + 2;
+			while(*dir == ' ') dir++;
+			chdir(dir);
 		} else {
         	char *args[64];
         	int argc_local = 0;
@@ -113,7 +114,7 @@ int main(int argc, char *argv[]){
     			int status;
     			waitpid(pid, &status, 0);
     			if(WIFEXITED(status) && WEXITSTATUS(status) == 127){
-        			printf("xsh: %s: command not found\n", args[0]);
+        			printf("xsh: %s: command not found\n127|", args[0]);
     			}
 			} else {
     			perror("xsh: unable to execute command");

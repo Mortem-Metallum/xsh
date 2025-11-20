@@ -1,3 +1,5 @@
+// The X shell
+// Copyright 2025, @ John Doe.
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
@@ -7,6 +9,7 @@
 #include <signal.h>
 #include <pwd.h>
 
+// Define the CPU arch
 #if defined(__x86_64__) || defined(_M_X64)
 	char arch[15] = "i86pc, amd64";
 #elif defined(__i386) || defined(_M_IX86)
@@ -24,6 +27,7 @@ char cwd[PATH_MAX];
 char cmd[705];
 char disclaimer[1596] = "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
 
+// Information for the prompt (% if a regular user, or # if root)
 void prompt(){
 	uid_t uid = getuid();
 	struct passwd *pw = getpwuid(uid);
@@ -36,6 +40,7 @@ void prompt(){
 	}
 }
 
+// When SIGINT occurs (Ctrl+C), just continue executing
 void handle_sigint(int sig){
     prompt();
 }
@@ -128,6 +133,7 @@ int main(int argc, char *argv[]){
     	}
 
     }
+	// When EOF occurs (Ctrl+D), print "exit" before returning code 0
 	printf("\nexit\n");
 	return 0;
 }

@@ -94,7 +94,24 @@ int main(int argc, char *argv[]){
 				printf("%s\n", pw->pw_name);
 			} else {
 				printf("who are you?\n");
+				printf("1|");
 			}
+		} else if(strncmp(cmd, "cat", 3) == 0){
+			char *file = cmd + 3;
+			while(*file == ' ') file++;
+			FILE* fp = fopen(file, "r");
+			if(fp == NULL){
+				printf("cat: %s: No such file or directory\n", file);
+				printf("2|");
+				continue;
+			}
+			char ch;
+			while((ch = fgetc(fp)) != EOF){
+				putchar(ch);
+			}
+			fclose(fp);
+
+
 		} else if(strncmp(cmd, "echo", 4) == 0){
 			char *msg = cmd + 4;
 			while(*msg == ' ') msg++;
@@ -121,10 +138,10 @@ int main(int argc, char *argv[]){
     			int status;
     			waitpid(pid, &status, 0);
     			if(WIFEXITED(status) && WEXITSTATUS(status) == 127){
-        			printf("xsh: %s: command not found\n127|", args[0]);
+        			printf("-xsh: %s: command not found\n127|", args[0]);
     			}
 			} else {
-    			perror("xsh: unable to execute command");
+    			perror("-xsh: unable to execute command");
 			}
     	}
 

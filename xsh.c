@@ -19,13 +19,25 @@
 	char arch[15] = "other";
 #endif
 
-char version[600] = "xsh version v1.0.0-alpha_release";
+char version[600] = "xsh version v1.0.0-beta_release";
 char cwd[PATH_MAX];
 char cmd[705];
 char disclaimer[1596] = "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
+
+void prompt(){
+	uid_t uid = getuid();
+	struct passwd *pw = getpwuid(uid);
+	if(strcmp(pw->pw_name, "root") != 0){
+		printf("%% ");
+   		fflush(stdout);
+	} else {
+		printf("# ");
+   		fflush(stdout);
+	}
+}
+
 void handle_sigint(int sig){
-    printf("\n%% ");
-    fflush(stdout);
+    prompt();
 }
 
 int main(int argc, char *argv[]){
@@ -52,16 +64,8 @@ int main(int argc, char *argv[]){
 	i++;
 
     while(1){
-		uid_t uid = getuid();
-		struct passwd *pw = getpwuid(uid);
-		if(strcmp(pw->pw_name, "root") != 0){
-			printf("%% ");
-   			fflush(stdout);
-		} else {
-			printf("# ");
-   			fflush(stdout);
-		}
    		
+		prompt();
 
     	if(fgets(cmd, sizeof(cmd), stdin) == NULL) {
         	break;

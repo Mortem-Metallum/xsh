@@ -11,4 +11,6 @@ It is unable to do (as of now):
 
     4. Variables
 
+    5. Loops
+    
 BUT I will implement these things in a later release eventually (maybe v2.0.0-stable?).

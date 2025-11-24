@@ -117,10 +117,10 @@ int main(int argc, char *argv[]){
 				printf("who are you?\n");
 				printf("1|");
 			}
-		} else if(strncmp(cmd, "cat", 3) == 0){
-			char *file = cmd + 3;
+		} else if(strncmp(cmd, "cat", 4) == 0){
+			char *file = cmd + 4;
 			char err[PATH_MAX];
-			snprintf(err, sizeof(err), "cat: cannot stat%s", file);
+			snprintf(err, sizeof(err), "cat: cannot stat %s", file);
 			while(*file == ' ') file++;
 			FILE* fp = fopen(file, "r");
 			if(fp == NULL){

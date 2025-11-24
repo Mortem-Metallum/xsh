@@ -114,7 +114,7 @@ int main(int argc, char *argv[]){
 
 
 
-    	if(strcmp(cmd, "") == 0){
+    	if(strcmp(cmd, "") == 0 || strchr(cmd, '#') != NULL){
         	continue;
     	} else if(strcmp(cmd, "pwd") == 0){
         	if(getcwd(cwd, sizeof(cwd)) != NULL) {

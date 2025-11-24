@@ -1,4 +1,3 @@
-Version is v1.2.5-stable
+Version is v1.3.0-stable
 
-1. Added a changelog (dunno why I didn't prior)
-2. Implemented basic scripting and .xshrc support
+1. Added basic comment support

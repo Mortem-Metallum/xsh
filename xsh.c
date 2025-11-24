@@ -152,16 +152,19 @@ int main(int argc, char *argv[]){
 			fclose(fp);
 
 
-		} else if(strncmp(cmd, "echo", 5) == 0){
-			char *msg = cmd + 5;
+		} else if(strncmp(cmd, "echo", 4) == 0){
+			printf("foo\n");
+			char *msg = cmd + 4;
+			while(*msg == ' ') msg++;
 			char *msg_head = strchr(msg, '"');
+			msg_head++;
 			if(msg_head == NULL) {
 				printf("%s\n", msg);
 			} else {
-    			char *msg_tail = strrchr(msg_head, '"');
-    			if(msg_tail != NULL && msg_tail != msg_head) {
-        			msg_head++;
+    			char *msg_tail = strrchr(msg, '"');
+    			if(msg_tail != NULL && msg_tail > msg_head) {
         			*msg_tail = '\0';
+				printf("%s\n", msg_tail);
 			        printf("%s\n", msg_head);
     			} else {
         			printf("echo: I say NO!\n1|");

@@ -84,8 +84,9 @@ int interpret(char *file){
 			    fclose(fp);
 
 
-		    } else if(strncmp(cmd, "echo", 5) == 0){
-			    char *msg = cmd + 5;
+		    } else if(strncmp(cmd, "echo", 4) == 0){
+			    char *msg = cmd + 4;
+				while(*msg == ' ') msg++;
 			    char *msg_head = strchr(msg, '"');
 			    if(msg_head == NULL) {
 				    printf("%s\n", msg);

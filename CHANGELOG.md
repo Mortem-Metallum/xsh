@@ -1,3 +1,3 @@
-Version is v1.3.0-stable
+Version is v1.3.5-stable
 
-1. Added basic comment support
+1. Fixed a bug where echo didn't exclude " characters

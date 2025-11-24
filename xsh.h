@@ -1,5 +1,6 @@
 #ifndef XSH_H
 #define XSH_H
+#include <stdio.h>
 
 struct cmds {
     char lastcmd[4096];
@@ -7,6 +8,6 @@ struct cmds {
 
 void handle_sigint(int sig);
 void prompt();
-int xsh_exec_script(char *file);
+int interpret(char *file);
 
 #endif

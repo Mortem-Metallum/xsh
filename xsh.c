@@ -3,11 +3,14 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/file.h>
+#include <sys/stat.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <limits.h>
 #include <string.h>
 #include <signal.h>
+#include <curses.h>
+#include <stdlib.h>
 #include <pwd.h>
 #include "xsh.h"
 
@@ -31,12 +34,13 @@
 
 char version[26] = "xsh version v1.2.0-stable";
 char cwd[PATH_MAX];
-char cmd[705];
+
 char disclaimer[1596] = "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
 char histfile[512];
+char xshrc[PATH_MAX];
 
 
-
+char cmd[705];
 
 int main(int argc, char *argv[]){
     signal(SIGINT, handle_sigint);
@@ -59,22 +63,35 @@ int main(int argc, char *argv[]){
 			printf("%s\n", disclaimer);
 			return 0;
 		} else {
-			printf("xsh: %s was unexpected at this time\n", argv[i]);
-			return 1;
+			int tryinter = interpret(argv[i]);
+			if(tryinter != 0){
+				printf("xsh: %s was unexpected at this time\n", argv[i]);
+				return 1;
+			} 
+			return 0;
 		}
 	i++;
 	}
-	
+	uid_t uid = getuid();
+	struct passwd *pw = getpwuid(uid);
+	snprintf(xshrc, sizeof(xshrc), "%s/.xshrc", pw->pw_dir);
+	FILE *openrc = fopen(xshrc, "r");
+	if(openrc != NULL){
+		interpret(xshrc);
+	} else {
+		;
+	}
 
     while(1){
-   		
+
 		prompt();
 
+
+		
 		char finalcmd[PATH_MAX];
 		snprintf(finalcmd, sizeof(finalcmd), "%s\n", cmd);
 		strncpy(cmds.lastcmd, finalcmd, sizeof(cmds.lastcmd));
-		uid_t uid = getuid();
-		struct passwd *pw = getpwuid(uid);
+		
 		if(!pw->pw_dir){
 			printf("who are you?\n");
 			printf("1|");
@@ -163,7 +180,7 @@ int main(int argc, char *argv[]){
 			}
 		} else if(strncmp(cmd, "mkdir", 5) == 0){
 			char *mk = cmd + 5;
-			int trymk = mkdir(mk, NULL);
+			int trymk = mkdir(mk, 666);
 			if(trymk != 0){
 				char err[PATH_MAX];
 				snprintf(err, sizeof(err), "mkdir: cannot create%s", mk);

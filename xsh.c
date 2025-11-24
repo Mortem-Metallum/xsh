@@ -135,8 +135,8 @@ int main(int argc, char *argv[]){
 			fclose(fp);
 
 
-		} else if(strncmp(cmd, "echo", 4) == 0){
-			char *msg = cmd + 4;
+		} else if(strncmp(cmd, "echo", 5) == 0){
+			char *msg = cmd + 5;
 			char *msg_head = strchr(msg, '"');
 			if(msg_head == NULL) {
 				printf("%s\n", msg);

@@ -79,7 +79,9 @@ int main(int argc, char *argv[]){
 	if(openrc != NULL){
 		interpret(xshrc);
 	} else {
-		;
+		FILE *createrc = fopen(xshrc, "w");
+		fprintf(createrc, "#!/usr/bin/env xsh\n# Autorun script for the X shell\n");
+		fclose(createrc);
 	}
 
     while(1){

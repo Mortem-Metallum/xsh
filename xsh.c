@@ -156,15 +156,14 @@ int main(int argc, char *argv[]){
 			char *msg = cmd + 4;
 			while(*msg == ' ') msg++;
 			char *msg_head = strchr(msg, '"');
-			msg_head++;
 			if(msg_head == NULL) {
 				printf("%s\n", msg);
 			} else {
     			char *msg_tail = strrchr(msg, '"');
     			if(msg_tail != NULL && msg_tail > msg_head) {
+					msg_head++;
         			*msg_tail = '\0';
-				printf("%s\n", msg_tail);
-			        printf("%s\n", msg_head);
+					printf("%s\n", msg_head);
     			} else {
         			printf("\n");
     			}

@@ -135,8 +135,9 @@ int main(int argc, char *argv[]){
 				printf("who are you?\n");
 				printf("1|");
 			}
-		} else if(strncmp(cmd, "cat", 4) == 0){
-			char *file = cmd + 4;
+		} else if(strncmp(cmd, "cat", 3) == 0){
+			char *file = cmd + 3;
+			while(*file == ' ') file++;
 			char err[PATH_MAX];
 			snprintf(err, sizeof(err), "cat: cannot stat %s", file);
 			while(*file == ' ') file++;
@@ -182,6 +183,7 @@ int main(int argc, char *argv[]){
 			}
 		} else if(strncmp(cmd, "mkdir", 5) == 0){
 			char *mk = cmd + 5;
+			while(*mk == ' ') mk++;
 			int trymk = mkdir(mk, 666);
 			if(trymk != 0){
 				char err[PATH_MAX];
@@ -189,9 +191,9 @@ int main(int argc, char *argv[]){
 				perror(err);
 				printf("1|");
 			}
-		} else if(strncmp(cmd, "touch", 6) == 0) {
+		} else if(strncmp(cmd, "touch", 5) == 0) {
 			char *mk = cmd + 6;
-			printf("%s\n", mk);
+			while(*mk == ' ') mk++;
 			int trymk = open(mk, O_CREAT);
 			if(trymk == 1){
 				char err[PATH_MAX];
@@ -206,8 +208,9 @@ int main(int argc, char *argv[]){
 				putchar(ch);
 			}
 			fclose(fp);
-		} else if(strncmp(cmd, "rm", 3) == 0){
-			char *del = cmd + 3;
+		} else if(strncmp(cmd, "rm", 2) == 0){
+			char *del = cmd + 2;
+			while(*del == ' ') del++;
 			int trydel = remove(del);
 			if(trydel != 0){
 				char err[PATH_MAX];

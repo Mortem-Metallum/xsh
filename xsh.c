@@ -9,7 +9,6 @@
 #include <limits.h>
 #include <string.h>
 #include <signal.h>
-#include <curses.h>
 #include <stdlib.h>
 #include <pwd.h>
 #include "xsh.h"

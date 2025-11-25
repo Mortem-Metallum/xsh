@@ -153,7 +153,6 @@ int main(int argc, char *argv[]){
 
 
 		} else if(strncmp(cmd, "echo", 4) == 0){
-			printf("foo\n");
 			char *msg = cmd + 4;
 			while(*msg == ' ') msg++;
 			char *msg_head = strchr(msg, '"');
@@ -167,7 +166,7 @@ int main(int argc, char *argv[]){
 				printf("%s\n", msg_tail);
 			        printf("%s\n", msg_head);
     			} else {
-        			printf("echo: I say NO!\n1|");
+        			printf("\n");
     			}
 			}
 

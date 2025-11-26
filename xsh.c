@@ -104,20 +104,11 @@ int main(int argc, char *argv[]){
 			fclose(openhist);
 		}
 
-    		if(fgets(cmd, sizeof(cmd), stdin) == NULL) {
-       			break;
-    		}
+    	if(fgets(cmd, sizeof(cmd), stdin) == NULL) {
+       		break;
+    	}
 
-	    	cmd[strcspn(cmd, "\n")] = '\0';
-		//		**WIP**
-		// char *cmd2 = strstr(cmd, "&&");
-		// if(cmd2 != NULL){
-		//	char *cmd3 = strtok(cmd2, "&&");
-		//	while(cmd3 != NULL){
-		//		printf("%s\n", cmd3);
-		//		cmd3 = strtok(NULL, "&&");
-		//	}
-		// }
+	    cmd[strcspn(cmd, "\n")] = '\0';
 
 
 		// Actually handle command logic

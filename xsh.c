@@ -118,9 +118,10 @@ int main(int argc, char *argv[]){
 			printf("%d|", ret);
 		}
 
-		// When EOF occurs (Ctrl+D), print "exit" before returning code 0
+		
 
+	}
+	// When EOF occurs (Ctrl+D), print "exit" before returning code 0
 	printf("\nexit\n");
 	return 0;
-	}
 }

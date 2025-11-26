@@ -31,7 +31,7 @@
 	char arch[15] = "other architecture";
 #endif
 
-char version[26] = "xsh version v1.3.5-stable";
+char version[26] = "xsh version v1.4.0-stable";
 char cwd[PATH_MAX];
 
 char disclaimer[1596] = "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
@@ -81,10 +81,7 @@ int main(int argc, char *argv[]){
 		FILE *createrc = fopen(xshrc, "w");
 		fprintf(createrc, "#!/usr/bin/env xsh\n# Autorun script for the X shell\n");
 		fclose(createrc);
-	}
-
-    while(1){
-
+	} while(1) {
 		prompt();
 
 
@@ -92,7 +89,7 @@ int main(int argc, char *argv[]){
 		char finalcmd[PATH_MAX];
 		snprintf(finalcmd, sizeof(finalcmd), "%s\n", cmd);
 		strncpy(cmds.lastcmd, finalcmd, sizeof(cmds.lastcmd));
-		
+	
 		if(!pw->pw_dir){
 			printf("who are you?\n");
 			printf("1|");
@@ -107,144 +104,33 @@ int main(int argc, char *argv[]){
 			fclose(openhist);
 		}
 
-    	if(fgets(cmd, sizeof(cmd), stdin) == NULL) {
-        	break;
-    	}
+    		if(fgets(cmd, sizeof(cmd), stdin) == NULL) {
+       			break;
+    		}
 
-    	cmd[strcspn(cmd, "\n")] = '\0';
-
-
-
-    	if(strcmp(cmd, "") == 0 || strchr(cmd, '#') != NULL){
-        	continue;
-    	} else if(strcmp(cmd, "pwd") == 0){
-        	if(getcwd(cwd, sizeof(cwd)) != NULL) {
-            		printf("%s\n", cwd);
-        	}
-    	} else if(strcmp(cmd, "clear") == 0){
-        	printf("\033c");
-    	} else if(strcmp(cmd, "exit") == 0){
-			printf("exit\n");
-        	return 0;
-    	} else if(strcmp(cmd, "whoami") == 0){
-			uid_t uid = getuid();
-			struct passwd *pw = getpwuid(uid);
-			if(pw){
-				printf("%s\n", pw->pw_name);
-			} else {
-				printf("who are you?\n");
-				printf("1|");
-			}
-		} else if(strncmp(cmd, "cat", 3) == 0){
-			char *file = cmd + 3;
-			while(*file == ' ') file++;
-			char err[PATH_MAX];
-			snprintf(err, sizeof(err), "cat: cannot stat %s", file);
-			while(*file == ' ') file++;
-			FILE* fp = fopen(file, "r");
-			if(fp == NULL){
-				perror(err);
-				printf("1|");
-				continue;
-			}
-			char ch;
-			while((ch = fgetc(fp)) != EOF){
-				putchar(ch);
-			}
-			fclose(fp);
+	    	cmd[strcspn(cmd, "\n")] = '\0';
+		//		**WIP**
+		// char *cmd2 = strstr(cmd, "&&");
+		// if(cmd2 != NULL){
+		//	char *cmd3 = strtok(cmd2, "&&");
+		//	while(cmd3 != NULL){
+		//		printf("%s\n", cmd3);
+		//		cmd3 = strtok(NULL, "&&");
+		//	}
+		// }
 
 
-		} else if(strncmp(cmd, "echo", 4) == 0){
-			char *msg = cmd + 4;
-			while(*msg == ' ') msg++;
-			char *msg_head = strchr(msg, '"');
-			if(msg_head == NULL) {
-				printf("%s\n", msg);
-			} else {
-    			char *msg_tail = strrchr(msg, '"');
-    			if(msg_tail != NULL && msg_tail > msg_head) {
-					msg_head++;
-        			*msg_tail = '\0';
-					printf("%s\n", msg_head);
-    			} else {
-        			printf("\n");
-    			}
-			}
-
-		} else if(strncmp(cmd, "cd", 2) == 0){
-			uid_t uid = getuid();
-			struct passwd *pw = getpwuid(uid);
-			char *dir = cmd + 2;
-			while(*dir == ' ') dir++;
-			if(strcmp(dir, "~") == 0 || strcmp(dir, "") == 0){
-				chdir(pw->pw_dir);
-			} else {
-				chdir(dir);
-			}
-		} else if(strncmp(cmd, "mkdir", 5) == 0){
-			char *mk = cmd + 5;
-			while(*mk == ' ') mk++;
-			int trymk = mkdir(mk, 666);
-			if(trymk != 0){
-				char err[PATH_MAX];
-				snprintf(err, sizeof(err), "mkdir: cannot create%s", mk);
-				perror(err);
-				printf("1|");
-			}
-		} else if(strncmp(cmd, "touch", 5) == 0) {
-			char *mk = cmd + 6;
-			while(*mk == ' ') mk++;
-			int trymk = open(mk, O_CREAT);
-			if(trymk == 1){
-				char err[PATH_MAX];
-				snprintf(err, sizeof(err), "touch: cannot create%s", mk);
-				perror(err);
-				printf("1|");
-			}
-		} else if(strcmp(cmd, "history") == 0){
-			FILE *fp = fopen(histfile, "r");
-			char ch;
-			while((ch = fgetc(fp)) != EOF){
-				putchar(ch);
-			}
-			fclose(fp);
-		} else if(strncmp(cmd, "rm", 2) == 0){
-			char *del = cmd + 2;
-			while(*del == ' ') del++;
-			int trydel = remove(del);
-			if(trydel != 0){
-				char err[PATH_MAX];
-				snprintf(err, sizeof(err), "rm: cannot remove %s", del);
-				perror(err);
-				printf("1|");
-			}
+		// Actually handle command logic
+		int ret = cmdlogic(cmd);
+		if(ret == 0){
+			continue;
 		} else {
-        	char *args[64];
-        	int argc_local = 0;
-        	char *token = strtok(cmd, " ");
-        	while(token && argc_local < 63){
-            	args[argc_local++] = token;
-            	token = strtok(NULL, " ");
-        	}
-        	args[argc_local] = NULL;
+			printf("%d|", ret);
+		}
 
-        	pid_t pid = fork();
-			if(pid == 0){
-    			execvp(args[0], args);
-    			_exit(127);
-			} else if(pid > 0){
-    			int status;
-    			waitpid(pid, &status, 0);
-    			if(WIFEXITED(status) && WEXITSTATUS(status) == 127){
-        			printf("-xsh: %s: command not found\n127|", args[0]);
-    			}
-			} else {
-    			perror("-xsh: could not execute");
-			}
-    	}
+		// When EOF occurs (Ctrl+D), print "exit" before returning code 0
 
-    }
-	// When EOF occurs (Ctrl+D), print "exit" before returning code 0
+	}
 	printf("\nexit\n");
 	return 0;
 }

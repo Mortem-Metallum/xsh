@@ -111,7 +111,7 @@ int main(int argc, char *argv[]){
 	    cmd[strcspn(cmd, "\n")] = '\0';
 
 		
-		int ret = cmdlogic();
+		int ret = cmdlogic(cmd);
 		if(ret == 0){
 			;
 		} else {

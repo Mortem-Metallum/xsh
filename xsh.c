@@ -187,7 +187,7 @@ int main(int argc, char *argv[]){
 			int trymk = mkdir(mk, 666);
 			if(trymk != 0){
 				char err[PATH_MAX];
-				snprintf(err, sizeof(err), "mkdir: cannot create%s", mk);
+				snprintf(err, sizeof(err), "mkdir: cannot create %s", mk);
 				perror(err);
 				printf("1|");
 			}
@@ -197,7 +197,7 @@ int main(int argc, char *argv[]){
 			int trymk = open(mk, O_CREAT);
 			if(trymk == 1){
 				char err[PATH_MAX];
-				snprintf(err, sizeof(err), "touch: cannot create%s", mk);
+				snprintf(err, sizeof(err), "touch: cannot create %s", mk);
 				perror(err);
 				printf("1|");
 			}

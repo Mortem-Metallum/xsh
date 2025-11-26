@@ -111,10 +111,110 @@ int main(int argc, char *argv[]){
 	    cmd[strcspn(cmd, "\n")] = '\0';
 
 
-		// Actually handle command logic
-		int ret = cmdlogic(cmd);
-		if(ret == 0){
-			continue;
+
+    	if(strcmp(cmd, "") == 0 || strchr(cmd, '#') != NULL){
+        	continue;
+    	} else if(strcmp(cmd, "pwd") == 0){
+        	if(getcwd(cwd, sizeof(cwd)) != NULL) {
+            		printf("%s\n", cwd);
+        	}
+    	} else if(strcmp(cmd, "clear") == 0){
+        	printf("\033c");
+    	} else if(strcmp(cmd, "exit") == 0){
+			printf("exit\n");
+        	return 0;
+    	} else if(strcmp(cmd, "whoami") == 0){
+			uid_t uid = getuid();
+			struct passwd *pw = getpwuid(uid);
+			if(pw){
+				printf("%s\n", pw->pw_name);
+			} else {
+				printf("who are you?\n");
+				printf("1|");
+			}
+		} else if(strncmp(cmd, "cat", 3) == 0){
+			char *file = cmd + 3;
+			while(*file == ' ') file++;
+			char err[PATH_MAX];
+			snprintf(err, sizeof(err), "cat: cannot stat %s", file);
+			while(*file == ' ') file++;
+			FILE* fp = fopen(file, "r");
+			if(fp == NULL){
+				perror(err);
+				printf("1|");
+				continue;
+			}
+			char ch;
+			while((ch = fgetc(fp)) != EOF){
+				putchar(ch);
+			}
+			fclose(fp);
+
+
+		} else if(strncmp(cmd, "echo", 4) == 0){
+			char *msg = cmd + 4;
+			while(*msg == ' ') msg++;
+			char *msg_head = strchr(msg, '"');
+			if(msg_head == NULL) {
+				printf("%s\n", msg);
+			} else {
+    			char *msg_tail = strrchr(msg, '"');
+    			if(msg_tail != NULL && msg_tail > msg_head) {
+					msg_head++;
+        			*msg_tail = '\0';
+					printf("%s\n", msg_head);
+    			} else {
+        			printf("\n");
+    			}
+			}
+
+		} else if(strncmp(cmd, "cd", 2) == 0){
+			uid_t uid = getuid();
+			struct passwd *pw = getpwuid(uid);
+			char *dir = cmd + 2;
+			while(*dir == ' ') dir++;
+			if(strcmp(dir, "~") == 0 || strcmp(dir, "") == 0){
+				chdir(pw->pw_dir);
+			} else {
+				chdir(dir);
+			}
+		} else if(strncmp(cmd, "mkdir", 5) == 0){
+			char *mk = cmd + 5;
+			while(*mk == ' ') mk++;
+			int trymk = mkdir(mk, 666);
+			if(trymk != 0){
+				char err[PATH_MAX];
+				snprintf(err, sizeof(err), "mkdir: cannot create%s", mk);
+				perror(err);
+				printf("1|");
+			}
+		} else if(strncmp(cmd, "touch", 5) == 0) {
+			char *mk = cmd + 6;
+			while(*mk == ' ') mk++;
+			int trymk = open(mk, O_CREAT);
+			if(trymk == 1){
+				char err[PATH_MAX];
+				snprintf(err, sizeof(err), "touch: cannot create%s", mk);
+				perror(err);
+				printf("1|");
+			}
+		} else if(strcmp(cmd, "history") == 0){
+			FILE *fp = fopen(histfile, "r");
+			char ch;
+			while((ch = fgetc(fp)) != EOF){
+				putchar(ch);
+			}
+			fclose(fp);
+		} else if(strncmp(cmd, "rm", 2) == 0){
+			char *del = cmd + 2;
+			while(*del == ' ') del++;
+			int trydel = remove(del);
+			if(trydel != 0){
+				char err[PATH_MAX];
+				snprintf(err, sizeof(err), "rm: cannot remove %s", del);
+				perror(err);
+				printf("1|");
+			}
 		} else {
 			printf("%d|", ret);
 		}

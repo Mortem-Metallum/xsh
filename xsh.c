@@ -67,7 +67,6 @@ int main(int argc, char *argv[]){
 				printf("xsh: %s requires an argument\n", argv[i]);
 				return 1;
 			}
-		}
 		} else {
 			int tryinter = interpret(argv[i]);
 			if(tryinter != 0){

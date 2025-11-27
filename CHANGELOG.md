@@ -1,4 +1,3 @@
-Version is v1.4.0-stable
+Version is v1.4.5-stable
 
-1. Moved all command logic in a separate function (int cmdlogic(char *cmd))
-2. Now, I can add proper return codes
+1. Added -c and --command args, both just execute a single command

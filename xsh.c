@@ -68,7 +68,7 @@ int main(int argc, char *argv[]){
 				return 1;
 			}
 		} else {
-			int tryinter = interpret(argv[i]);
+			int tryinter = interpret(argv[i], argv[0]);
 			if(tryinter != 0){
 				printf("%s: %s was unexpected at this time\n", argv[0], argv[i]);
 				return 1;

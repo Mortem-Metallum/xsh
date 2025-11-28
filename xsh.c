@@ -59,8 +59,8 @@ int main(int argc, char *argv[]){
 			printf("--command or -c: execute a single command\n");
 			return 0;
 		} else if(strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--command") == 0){
-			if(argc >= 2){
-				char *x = argv[2];
+			if(i + 1 < argc){
+				char *x = argv[i+1];
 				cmdlogic(x);
 				return 0;
 			} else {

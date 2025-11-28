@@ -61,7 +61,7 @@ int main(int argc, char *argv[]){
 		} else if(strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--command") == 0){
 			if(i + 1 < argc){
 				char *x = argv[i+1];
-				cmdlogic(x);
+				cmdlogic(x, argv[0]);
 				return 0;
 			} else {
 				printf("%s: %s requires an argument\n", argv[0], argv[i]);
@@ -90,7 +90,7 @@ int main(int argc, char *argv[]){
 	}
 	FILE *openrc = fopen(xshrc, "r");
 	if(openrc != NULL){
-		interpret(xshrc);
+		interpret(xshrc, progname);
 	} else {
 		FILE *createrc = fopen(xshrc, "w");
 		fprintf(createrc, "#!/usr/bin/env xsh\n# Autorun script for the X shell\n");

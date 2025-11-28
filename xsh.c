@@ -64,13 +64,13 @@ int main(int argc, char *argv[]){
 				cmdlogic(x);
 				return 0;
 			} else {
-				printf("xsh: %s requires an argument\n", argv[i]);
+				printf("%s: %s requires an argument\n", argv[0], argv[i]);
 				return 1;
 			}
 		} else {
 			int tryinter = interpret(argv[i]);
 			if(tryinter != 0){
-				printf("xsh: %s was unexpected at this time\n", argv[i]);
+				printf("%s: %s was unexpected at this time\n", argv[0], argv[i]);
 				return 1;
 			} 
 			return 0;
@@ -79,7 +79,15 @@ int main(int argc, char *argv[]){
 	}
 	uid_t uid = getuid();
 	struct passwd *pw = getpwuid(uid);
-	snprintf(xshrc, sizeof(xshrc), "%s/.xshrc", pw->pw_dir);
+	if(argv[0] == NULL){
+		return 1;
+	}
+	
+	if(argv[0][0] == '-'){
+		snprintf(xshrc, sizeof(xshrc), "%s/.xsh_profile", pw->pw_dir);
+	} else {
+		snprintf(xshrc, sizeof(xshrc), "%s/.xshrc", pw->pw_dir);
+	}
 	FILE *openrc = fopen(xshrc, "r");
 	if(openrc != NULL){
 		interpret(xshrc);
@@ -87,7 +95,7 @@ int main(int argc, char *argv[]){
 		FILE *createrc = fopen(xshrc, "w");
 		fprintf(createrc, "#!/usr/bin/env xsh\n# Autorun script for the X shell\n");
 		fclose(createrc);
-	} while(1) {
+	} while(1){
 		prompt();
 
 

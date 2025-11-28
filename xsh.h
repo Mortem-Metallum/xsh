@@ -9,7 +9,7 @@ struct cmds {
 } cmds;
 
 
-char progname[300];
+
 void handle_sigint(int sig);
 void prompt();
 int cmdlogic(char *cmd, char progname);

@@ -12,7 +12,7 @@ struct cmds {
 
 void handle_sigint(int sig);
 void prompt();
-int cmdlogic(char *cmd, char progname);
-int interpret(char *file, char progname);
+int cmdlogic(char *cmd);
+int interpret(char *file);
 
 #endif

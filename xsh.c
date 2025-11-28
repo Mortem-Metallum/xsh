@@ -116,6 +116,8 @@ int main(int argc, char *argv[]){
 		int ret = cmdlogic(cmd);
 		if(ret == 0){
 			;
+		} else if(ret == 139){
+			printf("xsh: Segmentation fault!");
 		} else {
 			printf("%d|", ret);
 		}

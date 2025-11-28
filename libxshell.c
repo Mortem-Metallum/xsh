@@ -42,7 +42,7 @@ void handle_sigint(int sig){
     printf("\n");
     prompt();
 }
-int cmdlogic(char *cmd, char progname){
+int cmdlogic(char *cmd){
 	uid_t uid = getuid();
 	struct passwd *pw = getpwuid(uid);
 	
@@ -185,7 +185,7 @@ int cmdlogic(char *cmd, char progname){
     			int status;
 	    		waitpid(pid, &status, 0);
     			if(WIFEXITED(status) && WEXITSTATUS(status) == 127){
-        			printf("%s: %s: command not found\n", progname, args[0]);
+        			printf("xsh: %s: command not found\n", args[0]);
 					return 127;
     			}
 		} else {
@@ -193,12 +193,12 @@ int cmdlogic(char *cmd, char progname){
 		}
     }
 }
-int interpret(char *file, char progname){
+int interpret(char *file){
 	FILE *fp = fopen(file, "r");
 	if(fp != NULL){
 		char line[MAX_LINE];
 		while(fgets(line, sizeof(line), fp)){
-			cmdlogic(line, progname);
+			cmdlogic(line);
 		}
 	} else {
 		return 1;

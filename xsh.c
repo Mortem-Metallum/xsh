@@ -61,16 +61,16 @@ int main(int argc, char *argv[]){
 		} else if(strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--command") == 0){
 			if(i + 1 < argc){
 				char *x = argv[i+1];
-				cmdlogic(x, argv[0]);
+				cmdlogic(x);
 				return 0;
 			} else {
-				printf("%s: %s requires an argument\n", argv[0], argv[i]);
+				printf("xsh: %s requires an argument\n", argv[i]);
 				return 1;
 			}
 		} else {
-			int tryinter = interpret(argv[i], argv[0]);
+			int tryinter = interpret(argv[i]);
 			if(tryinter != 0){
-				printf("%s: %s was unexpected at this time\n", argv[0], argv[i]);
+				printf("xsh: %s was unexpected at this time\n", argv[i]);
 				return 1;
 			} 
 			return 0;
@@ -79,35 +79,22 @@ int main(int argc, char *argv[]){
 	}
 	uid_t uid = getuid();
 	struct passwd *pw = getpwuid(uid);
-	if(argv[0] == NULL){
-		return 1;
-	}
-	
-	if(argv[0][0] == '-'){
-		snprintf(xshrc, sizeof(xshrc), "%s/.xsh_profile", pw->pw_dir);
-	} else {
-		snprintf(xshrc, sizeof(xshrc), "%s/.xshrc", pw->pw_dir);
-	}
+	snprintf(xshrc, sizeof(xshrc), "%s/.xshrc", pw->pw_dir);
 	FILE *openrc = fopen(xshrc, "r");
 	if(openrc != NULL){
-		interpret(xshrc, progname);
+		interpret(xshrc);
 	} else {
 		FILE *createrc = fopen(xshrc, "w");
 		fprintf(createrc, "#!/usr/bin/env xsh\n# Autorun script for the X shell\n");
 		fclose(createrc);
 	} while(1){
 		prompt();
-
-
-		
 		char finalcmd[PATH_MAX];
 		snprintf(finalcmd, sizeof(finalcmd), "%s\n", cmd);
 		strncpy(cmds.lastcmd, finalcmd, sizeof(cmds.lastcmd));
-		snprintf(progname, sizeof(progname), "%s", argv[0]);
 	
-		if(!pw->pw_dir){
+		if(!pw->pw_dir || !pw){
 			printf("who are you?\n");
-			printf("1|");
 		} else {
 			snprintf(histfile, sizeof(histfile), "%s/.xshhistory", pw->pw_dir);
 			FILE *openhist = fopen(histfile, "a");
@@ -126,7 +113,7 @@ int main(int argc, char *argv[]){
 	    cmd[strcspn(cmd, "\n")] = '\0';
 
 		
-		int ret = cmdlogic(cmd, progname);
+		int ret = cmdlogic(cmd);
 		if(ret == 0){
 			;
 		} else {

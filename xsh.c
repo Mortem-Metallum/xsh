@@ -95,6 +95,7 @@ int main(int argc, char *argv[]){
 		char finalcmd[PATH_MAX];
 		snprintf(finalcmd, sizeof(finalcmd), "%s\n", cmd);
 		strncpy(cmds.lastcmd, finalcmd, sizeof(cmds.lastcmd));
+		snprintf(progname, sizeof(progname), "%s", argv[0]);
 	
 		if(!pw->pw_dir){
 			printf("who are you?\n");
@@ -117,7 +118,7 @@ int main(int argc, char *argv[]){
 	    cmd[strcspn(cmd, "\n")] = '\0';
 
 		
-		int ret = cmdlogic(cmd);
+		int ret = cmdlogic(cmd, progname);
 		if(ret == 0){
 			;
 		} else {

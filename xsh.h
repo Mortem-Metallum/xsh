@@ -13,6 +13,6 @@ char progname[300];
 void handle_sigint(int sig);
 void prompt();
 int cmdlogic(char *cmd, char progname);
-int interpret(char *file);
+int interpret(char *file, char progname);
 
 #endif

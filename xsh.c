@@ -114,12 +114,20 @@ int main(int argc, char *argv[]){
 
 		
 		int ret = cmdlogic(cmd);
-		if(ret == 0){
-			;
-		} else if(ret == 139){
-			printf("xsh: Segmentation fault!\n");
-			printf("%d|", ret);
-		} else {
+		// Handle shell return codes
+		switch(ret){
+			// Signal 139 (segfault)
+			case 139:
+				printf("Segmentation fault!!!\n");
+				break;
+			// Signal 127 (command not found)
+			case 127:
+				break;
+			// No signal
+			default:
+				break;
+		}
+		if(ret != 0){
 			printf("%d|", ret);
 		}
 

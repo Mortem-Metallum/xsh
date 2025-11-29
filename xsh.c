@@ -117,7 +117,8 @@ int main(int argc, char *argv[]){
 		if(ret == 0){
 			;
 		} else if(ret == 139){
-			printf("xsh: Segmentation fault!");
+			printf("xsh: Segmentation fault!\n");
+			printf("%d|", ret);
 		} else {
 			printf("%d|", ret);
 		}

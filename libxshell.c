@@ -184,10 +184,15 @@ int cmdlogic(char *cmd){
 		} else if(pid > 0){
     			int status;
 	    		waitpid(pid, &status, 0);
+				if(WIFSIGNALED(status)){
+					int signal = WTERMSIG(status);
+					return 128 + signal;
+				}
+			
     			if(WIFEXITED(status) && WEXITSTATUS(status) == 127){
         			printf("xsh: %s: command not found\n", args[0]);
 					return 127;
-    			}
+				}
 		} else {
 			return 1;
 		}

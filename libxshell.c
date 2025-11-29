@@ -124,7 +124,13 @@ int cmdlogic(char *cmd){
 		if(strcmp(dir, "~") == 0 || strcmp(dir, "") == 0){
 			chdir(pw->pw_dir);
 		} else {
-			chdir(dir);
+			int trychg = chdir(dir);
+			if(trychg != 0){
+				char err[PATH_MAX];
+				snprintf(err, sizeof(err), "cd: cannot chdir into %s", dir);
+				perror(err);
+				return errno;
+			}
 		}
 		return 0;
 	} else if(strncmp(cmd, "mkdir", 5) == 0){

@@ -90,7 +90,7 @@ int cmdlogic(char *cmd){
 		FILE* fp = fopen(file, "r");
 		if(fp == NULL){
 			perror(err);
-			return 1;
+			return errno;
 		}
 		char ch;
 		while((ch = fgetc(fp)) != EOF){
@@ -132,19 +132,19 @@ int cmdlogic(char *cmd){
 		int trymk = mkdir(mk, 666);
 		if(trymk != 0){
 			char err[PATH_MAX];
-			snprintf(err, sizeof(err), "mkdir: cannot create%s", mk);
+			snprintf(err, sizeof(err), "mkdir: cannot create %s", mk);
 			perror(err);
-			return trymk;
+			return errno;
 		}
 	} else if(strncmp(cmd, "touch", 5) == 0) {
 		char *mk = cmd + 6;
 		while(*mk == ' ') mk++;
 		int trymk = open(mk, O_CREAT);
-		if(trymk == 1){
+		if(trymk == -1){
 			char err[PATH_MAX];
-			snprintf(err, sizeof(err), "touch: cannot create%s", mk);
+			snprintf(err, sizeof(err), "touch: cannot create %s", mk);
 			perror(err);
-			return trymk;
+			return errno;
 		}
 	} else if(strcmp(cmd, "history") == 0){
 		uid_t uid = getuid();
@@ -165,7 +165,7 @@ int cmdlogic(char *cmd){
 			char err[PATH_MAX];
 			snprintf(err, sizeof(err), "rm: cannot remove %s", del);
 			perror(err);
-			return trydel;
+			return errno;
 		}
 	} else {
         	char *args[64];
